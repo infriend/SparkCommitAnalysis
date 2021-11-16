@@ -1,11 +1,11 @@
-package com.nju.spark_example
+package spark_example
 
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
 import org.apache.spark.sql.functions.explode
 
-object Read_JSON_Data {
+object    Read_JSON_Data {
   def main(args:Array[String]): Unit = {
     val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("SparkSQL01_Demo")
     val spark : SparkSession = SparkSession.builder().config(conf).getOrCreate()
