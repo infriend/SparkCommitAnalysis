@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nju.sparkcommitanalysis.mapper.TbpersioncommitMapper">
+
+    <resultMap id="BaseResultMap" type="com.nju.sparkcommitanalysis.domain.Tbpersioncommit">
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="commitYear" column="commit_year" jdbcType="VARCHAR"/>
+            <result property="commitCounter" column="commit_counter" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        name,commit_year,commit_counter
+    </sql>
+    <select id="countAllCommits" resultType="com.nju.sparkcommitanalysis.domain.Tbpersioncommit">
+        select name, SUM(commit_counter), MAX(commit_year)
+        from tbPersioncommit
+        group by name
+    </select>
+</mapper>

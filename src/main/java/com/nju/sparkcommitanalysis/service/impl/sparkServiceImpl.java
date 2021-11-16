@@ -1,5 +1,7 @@
 package com.nju.sparkcommitanalysis.service.impl;
 
+import com.nju.sparkcommitanalysis.HdfsUpload;
+import com.nju.sparkcommitanalysis.domain.Tbpersioncommit;
 import com.nju.sparkcommitanalysis.service.sparkService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -30,16 +32,17 @@ public class sparkServiceImpl implements sparkService {
         if (inProgress.compareAndSet(false, true)) {
             tasksList = Collections.synchronizedList(new ArrayList<Long>());
 
-            for (long i=0 ; i<250000000000l ; i++) {
+            HdfsUpload upload = new HdfsUpload();
+
+            for (int i=0 ; i<fileList.length; i++) {
                 if (Thread.currentThread().isInterrupted()) {
                     System.out.println("Cancelled");
                     inProgress.set(false);
                     return new AsyncResult<List<Long>>(tasksList);
                 }
-                tasksList.add(Long.valueOf(i));
-
+                upload.upload("dataset"+fileList[i], "hdfs://114.115.141.92:8020/commit");
                 try {
-                    TimeUnit.MILLISECONDS.sleep(1);
+                    TimeUnit.MILLISECONDS.sleep(500);
                 } catch (InterruptedException e) {
                     System.out.println("Cancelled in sleep");
                     // thread might get interrupted during sleep not only during work
@@ -52,5 +55,10 @@ public class sparkServiceImpl implements sparkService {
 
     public Integer doneSoFar() {
         return tasksList.size() ;
+    }
+
+    @Override
+    public List<Tbpersioncommit> getData() {
+        return null;
     }
 }
